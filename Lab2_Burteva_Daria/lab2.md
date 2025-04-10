@@ -29,13 +29,25 @@
   - Используйте Set() для выполнения задания.
 
   ```javascript
-    const getUniqueTransactionTypes = (transactions) => [...new Set(transactions.map(t => t.transaction_type))];
+    /**
+ * Получить уникальные типы транзакций.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {Array<string>} Уникальные типы транзакций.
+ */
+const getUniqueTransactionTypes = (transactions) => [...new Set(transactions.map(t => t.transaction_type))];
+
   ```
 
 ### 2. `calculateTotalAmount(transactions)`  – Вычисляет сумму всех транзакций.
 
 ```JS
-  const calculateTotalAmount = (transactions) => transactions.reduce((sum, t) => sum + t.transaction_amount, 0);
+  /**
+ * Вычисляет общую сумму всех транзакций.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {number} Общая сумма транзакций.
+ */
+const calculateTotalAmount = (transactions) => transactions.reduce((sum, t) => sum + t.transaction_amount, 0);
+
 ```
 
 ### 3. calculateTotalAmountByDate(transactions, year, month, day) [extra]
@@ -45,6 +57,14 @@
 - В случае отсутствия одного из параметров, метод производит расчет по остальным.
 
 ```JS
+/**
+ * Вычисляет сумму транзакций за указанную дату.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {number} [year] - Год.
+ * @param {number} [month] - Месяц (1-12).
+ * @param {number} [day] - День.
+ * @returns {number} Сумма транзакций за выбранную дату.
+ */
 const calculateTotalAmountByDate = (transactions, year, month, day) => {
     return transactions
         .filter(t => {
@@ -60,12 +80,26 @@ const calculateTotalAmountByDate = (transactions, year, month, day) => {
 ### 4. `getTransactionByType(transactions, type)` - Возвращает транзакции указанного типа (debit или credit)
 
 ```JS
+/**
+ * Возвращает транзакции по типу (например, "debit" или "credit").
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {string} type - Тип транзакции.
+ * @returns {Array<Object>} Отфильтрованные транзакции.
+ */
 const getTransactionByType = (transactions, type) => transactions.filter(t => t.transaction_type === type);
+
 ```
 
 ### 5. `getTransactionsInDateRange(transactions, startDate, endDate)` – Возвращает массив транзакций, проведенных в указанном диапазоне дат от startDate до endDate.
 
 ```JS
+/**
+ * Получает транзакции в заданном диапазоне дат.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {string} startDate - Начальная дата (ISO строка).
+ * @param {string} endDate - Конечная дата (ISO строка).
+ * @returns {Array<Object>} Транзакции в заданном диапазоне.
+ */
 const getTransactionsInDateRange = (transactions, startDate, endDate) => {
     return transactions.filter(t => {
         const date = new Date(t.transaction_date);
@@ -77,39 +111,62 @@ const getTransactionsInDateRange = (transactions, startDate, endDate) => {
 ### 6. `getTransactionsByMerchant(transactions, merchantName)` – Возвращает массив транзакций, совершенных с указанным merchantName.
 
 ```js
+/**
+ * Получает транзакции по названию продавца.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {string} merchantName - Название продавца.
+ * @returns {Array<Object>} Транзакции с данным продавцом.
+ */
 const getTransactionsByMerchant = (transactions, merchantName) => transactions.filter(t => t.merchant_name === merchantName);
+
+
 ```
 
 ### 7. `calculateAverageTransactionAmount(transactions)` – Возвращает среднее значение транзакций.
 
 ```js
 /**
- * Высчитывает среднее значение транзакции между всеми транзакциями
- * @param {Array} transactions Массив транзакций
- * @returns {Array} среднее арифметическое поля transaction_amount
+ * Вычисляет среднюю сумму транзакции.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {number} Средняя сумма транзакции.
  */
-export function calculateAverageTransactionAmount(transactions)
-{
-    let sumAmount = calculateTotalAmount(transactions);
-    return sumAmount / transactions.length;
-}
+const calculateAverageTransactionAmount = (transactions) => transactions.length === 0 ? 0 : calculateTotalAmount(transactions) / transactions.length;
 ```
 
 ### 8. `getTransactionsByAmountRange(transactions, minAmount, maxAmount)` – Возвращает массив транзакций с суммой в заданном диапазоне от minAmount до maxAmount.
 
 ```js
-const calculateAverageTransactionAmount = (transactions) => transactions.length === 0 ? 0 : calculateTotalAmount(transactions) / transactions.length;
+/**
+ * Получает транзакции в указанном диапазоне сумм.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {number} minAmount - Минимальная сумма.
+ * @param {number} maxAmount - Максимальная сумма.
+ * @returns {Array<Object>} Транзакции, попадающие в диапазон.
+ */
+const getTransactionsByAmountRange = (transactions, minAmount, maxAmount) => transactions.filter(t => t.transaction_amount >= minAmount && t.transaction_amount <= maxAmount);
 ```
 
 ### 9. `calculateTotalDebitAmount(transactions)` – Вычисляет общую сумму дебетовых транзакций.
 
 ```js
-const calculateTotalDebitAmount = (transactions) => calculateTotalAmount(getTransactionByType(transactions, "debit"));
+/**
+ * Получает транзакции в указанном диапазоне сумм.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {number} minAmount - Минимальная сумма.
+ * @param {number} maxAmount - Максимальная сумма.
+ * @returns {Array<Object>} Транзакции, попадающие в диапазон.
+ */
+const getTransactionsByAmountRange = (transactions, minAmount, maxAmount) => transactions.filter(t => t.transaction_amount >= minAmount && t.transaction_amount <= maxAmount);
 ```
 
 ### 10. `findMostTransactionsMonth(transactions)` – Возвращает месяц, в котором было больше всего транзакций.
 
 ```js
+/**
+ * Определяет месяц с наибольшим количеством транзакций.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {string} Месяц (1–12) с наибольшим количеством транзакций.
+ */
 const findMostTransactionsMonth = (transactions) => {
     const counts = transactions.reduce((acc, t) => {
         const month = new Date(t.transaction_date).getMonth() + 1;
@@ -123,6 +180,11 @@ const findMostTransactionsMonth = (transactions) => {
 ### 11. `findMostDebitTransactionMonth(transactions)` – Возвращает месяц, в котором было больше дебетовых транзакций.
 
 ```js
+/**
+ * Определяет месяц с наибольшим количеством дебетовых транзакций.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {string} Месяц (1–12) с наибольшим количеством дебетовых транзакций.
+ */
 const findMostDebitTransactionMonth = (transactions) => findMostTransactionsMonth(getTransactionByType(transactions, "debit"));
 ```
 
@@ -133,6 +195,11 @@ const findMostDebitTransactionMonth = (transactions) => findMostTransactionsMont
 - Возвращает equal, если количество равно.
 
 ```js
+/**
+ * Определяет, какого типа транзакций больше — "debit", "credit" или они равны.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {string} Тип с наибольшим количеством транзакций или "equal".
+ */
 const mostTransactionTypes = (transactions) => {
     const debitCount = getTransactionByType(transactions, "debit").length;
     const creditCount = getTransactionByType(transactions, "credit").length;
@@ -143,19 +210,35 @@ const mostTransactionTypes = (transactions) => {
 ### 13. `getTransactionsBeforeDate(transactions, date)` – Возвращает массив транзакций, совершенных до указанной даты.
 
 ```js
+/**
+ * Получает транзакции до заданной даты.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {string} date - Дата в формате ISO.
+ * @returns {Array<Object>} Транзакции до указанной даты.
+ */
 const getTransactionsBeforeDate = (transactions, date) => transactions.filter(t => new Date(t.transaction_date) < new Date(date));
 ```
 
 ### 14. `findTransactionById(transactions, id)` – Возвращает транзакцию по ее уникальному идентификатору (id).
 
 ```js
+/**
+ * Находит транзакцию по идентификатору.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @param {string} id - Идентификатор транзакции.
+ * @returns {Object|undefined} Найденная транзакция или undefined.
+ */
 const findTransactionById = (transactions, id) => transactions.find(t => t.transaction_id === id);
 ```
 
 ### 15. `mapTransactionDescriptions(transactions)` – Возвращает новый массив, содержащий только описания транзакций.
 
 ```js
-const mapTransactionDescriptions = (transactions) => transactions.map(t => t.transaction_description);
+/**
+ * Возвращает массив описаний всех транзакций.
+ * @param {Array<Object>} transactions - Список транзакций.
+ * @returns {Array<string>} Массив описаний транзакций.
+ */
 ```
 
 
