@@ -52,11 +52,11 @@ table td {
   text-align: left;
 }
 
-#debit-g {
+.green {
   background-color: #e6ffed;
 }
 
-#credit-r {
+.red {
   background-color: #ffe6e6;
 }
 
